@@ -1,0 +1,66 @@
+import React, { useState, useEffect } from "react";
+
+function App() {
+  const [task, setTask] = useState("");
+  const [tasks, setTasks] = useState([]);
+
+  // Load saved tasks from localStorage
+  useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem("tasks")) || [];
+    setTasks(saved);
+  }, []);
+
+  // Save tasks to localStorage whenever updated
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
+  const addTask = () => {
+    if (task.trim() === "") return;
+    setTasks([...tasks, { text: task, done: false }]);
+    setTask("");
+  };
+
+  const toggleTask = (index) => {
+    const updated = [...tasks];
+    updated[index].done = !updated[index].done;
+    setTasks(updated);
+  };
+
+  const deleteTask = (index) => {
+    const updated = tasks.filter((_, i) => i !== index);
+    setTasks(updated);
+  };
+
+  return (
+    <div style={{ margin: "40px auto", width: "300px", textAlign: "center" }}>
+      <h2>React To-Do List</h2>
+      <input
+        type="text"
+        value={task}
+        onChange={(e) => setTask(e.target.value)}
+        placeholder="Enter a task"
+      />
+      <button onClick={addTask}>Add</button>
+
+      <ul style={{ listStyle: "none", padding: 0 }}>
+        {tasks.map((t, index) => (
+          <li key={index}>
+            <span
+              style={{
+                textDecoration: t.done ? "line-through" : "none",
+                marginRight: "10px",
+              }}
+              onClick={() => toggleTask(index)}
+            >
+              {t.text}
+            </span>
+            <button onClick={() => deleteTask(index)}>❌</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default App;
