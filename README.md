@@ -1,4 +1,4 @@
-# Project 1 React To-Do List
+# Project 1 React To-Do List___
 
 A simple To-Do List app built with React. Tasks are stored in the browser's local storage.
 
